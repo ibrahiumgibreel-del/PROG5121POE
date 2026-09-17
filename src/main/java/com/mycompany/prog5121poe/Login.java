@@ -1,5 +1,8 @@
 package com.mycompany.prog5121poe;
-
+ /**
+*Stores a users registration details and provides methods for
+*validating registration information and authenticating login details
+*/
 public class Login {
 
 
@@ -18,11 +21,11 @@ private String firstName;
         this.password = password;
         this.cellPhoneNumber = cellPhoneNumber;
     }
-
+//Checks that the username contains an underscore and has 5 or fewer characters.
     public boolean checkUserName() {
         return username.contains("_") && username.length() <= 5;
     }
-
+//Checks the password length, capital letter, number and special character.
     public boolean checkPasswordComplexity() {
         boolean hasEightCharacters = password.length() >= 8;
         boolean hasCapitalLetter = password.matches(".*[A-Z].*");
@@ -35,7 +38,7 @@ private String firstName;
                 && hasNumber
                 && hasSpecialCharacter;
     }
-
+// Checks that the cellphone number uses +27 folloowed by 9  digits.
     public boolean checkCellPhoneNumber() {
         /*
          * Regex syntax reference:
@@ -46,6 +49,7 @@ private String firstName;
          */
         return cellPhoneNumber.matches("^\\+27\\d{9}$");
     }
+    //returns the appropriate registration success or error message.
 public String registerUser() {
         if (!checkUserName()) {
             return "Username is not correctly formatted; please ensure that "
@@ -68,14 +72,14 @@ public String registerUser() {
                 + "Password successfully captured.\n"
                 + "Cell phone number successfully added.";
     }
-
+// compares the entered login details with the registered login details
     public boolean loginUser(String enteredUsername,
             String enteredPassword) {
 
         return username.equals(enteredUsername)
                 && password.equals(enteredPassword);
     }
-
+// Returns the appropriate succesful or failed login message
     public String returnLoginStatus(boolean loginSuccessful) {
         if (loginSuccessful) {
             return "Welcome " + firstName + ", " + lastName
