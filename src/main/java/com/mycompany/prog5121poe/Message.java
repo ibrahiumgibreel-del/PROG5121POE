@@ -75,9 +75,11 @@ public String createMessageHash() {
     String cleanedMessage = messageText.trim();
     String[] words = cleanedMessage.split("\\s+");
 
-    String firstWord = words[0];
-    String lastWord = words[words.length - 1];
-
+    String firstWord = words[0]
+    .replaceAll("[^a-zA-Z0-9]", "");
+                    
+    String lastWord = words[words.length - 1]
+            .replaceAll("[^a-zA-Z0-9]", "");
     messageHash = messageID.substring(0, 2)
             + ":"
             + messageNumber
@@ -169,5 +171,9 @@ public String getMessageHash() {
 public String getMessageStatus() {
     return messageStatus;
 }
+
+    private void replaceAll(String azAZ09, String string) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
 
