@@ -81,6 +81,9 @@ public class PROG5121POE {
     private static void runQuickChat(Scanner input) {
     System.out.println("Welcome to QuickChat.");
 
+    MessageManager messageManager = new MessageManager();
+System.out.println(messageManager.loadStoredMessagesFromJson());
+
     int maximumMessages;
 
     do {
@@ -99,7 +102,8 @@ public class PROG5121POE {
         System.out.println("\nQuickChat Menu");
         System.out.println("1. Send Messages");
         System.out.println("2. Show recently sent messages");
-        System.out.println("3. Quit");
+        System.out.println("3. Stored Messages");
+        System.out.println("4. Quit");
         System.out.print("Enter your selection: ");
 
         menuChoice = readInteger(input);
@@ -185,18 +189,40 @@ public class PROG5121POE {
                             "Message: " + message.getMessageText()
                     );
                 }
-
                 if (action >= 1 && action <= 3) {
-                    processedMessages++;
+                String flag;
+
+                if (action == 1) {
+                    flag = "Sent";
+                } else if (action == 2) {
+                    flag = "Disregard";
+                } else {
+                    flag = "Stored";
                 }
 
+                messageManager.addMessage(
+                        "Developer",
+                        message.getRecipient(),
+                        message.getMessageText(),
+                        flag,
+                        message.getMessageID(),
+                        message.getMessageHash()
+                );
+
+                processedMessages++;
+            }
+
+                
                 break;
 
             case 2:
                 System.out.println("Coming Soon.");
                 break;
-
             case 3:
+                 runStoredMessagesMenu(input, messageManager);
+                 break;
+                 
+            case 4:
                 System.out.println(
                         "Total messages sent: "
                         + Message.returnTotalMessages()
@@ -205,11 +231,88 @@ public class PROG5121POE {
 
             default:
                 System.out.println(
-                        "Invalid selection. Please choose 1, 2 or 3."
+                        "Invalid selection. Please choose 1, 2 , 3 or 4."
                 );
                 break;
         }
-    } while (menuChoice != 3);
+    } while (menuChoice != 4);
+}
+private static void runStoredMessagesMenu(
+Scanner input, MessageManager messageManager) {
+
+    int storedChoice;
+
+    do {
+        System.out.println("\nStored Messages Menu");
+        System.out.println("1. Display stored senders and recipients");
+        System.out.println("2. Display the longest stored message");
+        System.out.println("3. Search using a message ID");
+        System.out.println("4. Search using a recipient");
+        System.out.println("5. Delete using a message hash");
+        System.out.println("6. Display message report");
+        System.out.println("7. Return to QuickChat menu");
+        System.out.print("Enter your selection: ");
+
+        storedChoice = readInteger(input);
+
+        switch (storedChoice) {
+            case 1:
+                System.out.println(
+                        messageManager.displayStoredSendersAndRecipients()
+                );
+                break;
+
+            case 2:
+                System.out.println(
+                        messageManager.getLongestStoredMessage()
+                );
+                break;
+
+            case 3:
+                System.out.print("Enter the message ID: ");
+                String messageID = input.nextLine().trim();
+
+                System.out.println(
+                        messageManager.searchMessageDetailsByID(messageID)
+                );
+                break;
+
+            case 4:
+                System.out.print("Enter the recipient number: ");
+                String recipient = input.nextLine().trim();
+
+                System.out.println(
+                        messageManager.searchMessagesByRecipient(recipient)
+                );
+                break;
+
+            case 5:
+                System.out.print("Enter the message hash: ");
+                String messageHash = input.nextLine().trim();
+
+                System.out.println(
+                        messageManager.deleteMessageByHash(messageHash)
+                );
+                break;
+
+            case 6:
+                System.out.println(
+                        messageManager.displayMessageReport()
+                );
+                break;
+
+            case 7:
+                System.out.println("Returning to QuickChat menu.");
+                break;
+
+            default:
+                System.out.println(
+                        "Invalid selection. Please choose 1 to 7."
+                );
+                break;
+        }
+
+    } while (storedChoice != 7);
 }
 
 private static int readInteger(Scanner input) {
